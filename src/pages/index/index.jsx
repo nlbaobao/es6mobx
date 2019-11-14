@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import $ from 'jquery'
+import React, { Component } from "react";
+// import $ from 'jquery'
 import { ajax } from "../../utils/http";
 export default class index extends Component {
-  componentDidMount(){
-    this.postlist()
-    console.log($)
+  componentDidMount() {
+    this.postlist();
+    // console.log($);
   }
   postlist() {
     const data = {
@@ -28,10 +28,6 @@ export default class index extends Component {
       });
   }
   render() {
-    return (
-      <div>
-        index!!!!!!!!!
-      </div>
-    )
+    return <div>index!!!!!!!!!</div>;
   }
 }
