@@ -196,9 +196,9 @@ export const promiseAll = () => {
     .then(result => result)
     .catch(e => e);
 
-  Promise.all([p1, p2])
-    .then(result => console.log(result))
-    .catch(e => console.log(e));
+  // Promise.all([p1, p2])
+  //   .then(result => console.log(result))
+  //   .catch(e => console.log(e));
   // ["hello", Error: 报错了]
 };
 
