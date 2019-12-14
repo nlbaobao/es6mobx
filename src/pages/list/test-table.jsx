@@ -1,148 +1,121 @@
 import React, { Component } from "react";
-import { Table } from "antd";
+import { Tag, Input, Button, Row, Col, message } from "antd";
 export default class TestTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      columns: [],
-      data: []
+      data: [],
+      value: '',
+      floor: 0,
+      count: 0
     };
+    this.test = [{
+      title: '华为'
+    }, {
+      title: '三星',
+    }, {
+      title: '乐视',
+    }, {
+      title: '特等奖',
+    }, {
+      title: '点击',
+    }, {
+      title: 'QQ',
+    }, {
+      title: '谢谢参与',
+    }, {
+      title: '优惠卷',
+    }, {
+      title: '苹果',
+    }],
+      this.count = 0
+    this.timmer = null
   }
   componentDidMount() {
-    this.mockData();
   }
-  renderContent(value, row, index) {
-    const obj = {
-      children: value,
-      props: {}
-    };
-    if (index === 4) {
-      obj.props.colSpan = 0;
-    }
-    return obj;
-  }
-  mockData() {
-    const columns = [
-      {
-        title: "Name",
-        dataIndex: "name"
-      },
-      {
-        title: "Age",
-        dataIndex: "age"
-        // render: this.renderContent
-      },
-      {
-        title: "Home phone",
 
-        dataIndex: "tel",
-        render: (value, row, index) => {
-          const obj = {
-            children: value,
-            props: {}
-          };
-          if (index === 2) {
-            obj.props.rowSpan = 3;
-          }
-          // These two are merged into above cell
-          if (index === 3) {
-            obj.props.rowSpan = 0;
-          }
-          if (index === 4) {
-            obj.props.rowSpan = 0;
-          }
-
-          return obj;
-        }
-      },
-      {
-        title: "Phone",
-        dataIndex: "phone",
-        render: (value, row, index) => {
-          const obj = {
-            children: value,
-            props: {}
-          };
-          if (index === 2) {
-            obj.props.rowSpan = 3;
-          }
-          // These two are merged into above cell
-          if (index === 3) {
-            obj.props.rowSpan = 0;
-          }
-          if (index === 4) {
-            obj.props.rowSpan = 0;
-          }
-
-          return obj;
-        }
-      },
-      {
-        title: "Address",
-
-        dataIndex: "address"
-      }
-    ];
-
-    const data = [
-      {
-        key: "1",
-        name: "John Brown",
-        age: 32,
-        tel: "0571-22098909",
-        phone: 18889898989,
-        address: "New York No. 1 Lake Park"
-      },
-      {
-        key: "2",
-        name: "Jim Green",
-        tel: "0571-22098333",
-        phone: 18889898888,
-        age: 42,
-        address: "London No. 1 Lake Park"
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        age: 32,
-        tel: "0575-22098909",
-        phone: 18900010002,
-        address: "Sidney No. 1 Lake Park"
-      },
-      {
-        key: "4",
-        name: "Jim Red",
-        age: 18,
-        tel: "0575-22098909",
-        phone: 18900010002,
-        address: "London No. 2 Lake Park"
-      },
-      {
-        key: "5",
-        name: "Jake White",
-        age: 18,
-        tel: "0575-22098909",
-        phone: 18900010002,
-        address: "Dublin No. 2 Lake Park"
-      }
-    ];
+  math() {
+    this.count++
+    console.log(this.count)
+    var num = Math.floor(Math.random() * 9);
     this.setState({
-      data,
-      columns
-    });
+      floor: num === 4 ? 0 : num,
+    })
+    if (this.count > 20) {
+      clearInterval(this.timmer)
+      this.count = 0
+    }
+
   }
+  renderColor(index) {
+    if (index < 1) {
+      return 'magenta'
+    }
+    else if (index > 1 && index < 5) {
+      return 'geekblue'
+    }
+    else {
+      return 'volcano'
+    }
+  }
+  renderBackGround(index){
+    const {floor} = this.state
+    if(index===4){
+      return 'orange'
+    }
+    if(index===floor&&index!==4){
+      return '#eee'
+    }
+    else{
+      return 'white'
+    }
+  }
+
   render() {
-    const { columns, data } = this.state;
+    const { data, value, floor, count } = this.state;
     return (
-      <div>
-        <Table
-          columns={columns}
-          dataSource={data}
-          bordered
-          // size="middle"
-          // scroll={{ x: "130%", y: 240 }}
-        />
+      <div style={{ width: '510px', margin: '0 auto', padding: 20 }}>
+        <Row>
+          <Col style={{ height: '32px', lineHeight: '32px' }} span={4}>添加标签:</Col>
+          <Col span={16}><Input value={value} onChange={(e) => {
+            this.setState({
+              value: e.target.value.trim()
+            })
+          }} /></Col>
+          <Col offset={1} span={3}>  <Button onClick={() => {
+            value === '' ? null : data.push(value)
+            this.setState({
+              data,
+              value: ''
+            })
+          }}>添加</Button></Col>
+        </Row>
+
+        {data.map((item, index) => {
+          return (
+            <Tag style={{ marginTop: 20 }} color={this.renderColor(index)} key={index}>{item}</Tag>
+          )
+        })}
+        <Row style={{ marginTop: 20 }}>
+          {this.test.map((item, index) => {
+            return (
+              <Col key={index} span={8}><div onClick={() => {
+                if (index === 4&&this.count==0) {
+                  this.timmer = setInterval(() => {
+                    this.math()
+                  }, 100)
+                }else if(index === 4&&this.count!==0){
+                  message.info('正在抽奖......')
+                }
+
+              }} style={{ width: 168, justifyContent: 'center', border: '1px solid #000', height: 168, display: 'flex', alignItems: 'center', background: `${this.renderBackGround(index)}`, cursor: `${index === 4 ? 'pointer' : 'normal'}` }}>{item.title}</div></Col>
+            )
+          })}
+
+
+        </Row>
       </div>
+
     );
   }
 }

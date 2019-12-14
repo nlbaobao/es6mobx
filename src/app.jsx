@@ -13,12 +13,12 @@ export default class APP extends React.Component {
       <Layout>
         <Route exact path="/home" component={Index} />
         <Route exact path="/home/list" component={List} />
-        <Route exact path="/home/test" component={TestTable} />
         <Route exact path="/home/list/details" component={Details} />
       </Layout>
     );
     return (
       <Router>
+        <Route exact path="/test" component={TestTable} />
         <Route exact path="/" component={Login} />
         <Route path="/home" component={IndexRoute} />
       </Router>
