@@ -33,9 +33,9 @@ const config = {
     new MiniCssExtractPlugin({
       filename: "[name].css"
     }),
-    new webpack.DllReferencePlugin({
-      manifest: path.resolve(__dirname,'../static/vendor.manifest.json'),
-    }),
+    // new webpack.DllReferencePlugin({
+    //   manifest: path.resolve(__dirname,'../static/vendor.manifest.json'),
+    // }),
     new FriendlyErrorsWebpackPlugin(),
     new CleanWebpackPlugin(),
     new webpack.DefinePlugin({

@@ -9,7 +9,8 @@ const HTMLWebpackPlugin = require("html-webpack-plugin");
 const appHtml = path.resolve(appPublic, "index.html");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const config = {
   mode: "development",
   devtool: "inline-source-map",
@@ -44,7 +45,15 @@ const config = {
       }
     }
   },
-
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM',
+    lodash: '_',
+    jquery: 'jQuery',
+    d3: 'd3',
+    echarts: 'echarts',
+    moment: 'moment'
+  },
   plugins: [
     new HTMLWebpackPlugin({
       template: appHtml,
@@ -55,10 +64,27 @@ const config = {
     }),
     new FriendlyErrorsWebpackPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.DllReferencePlugin({
-      manifest: path.resolve(__dirname,'../static/vendor.manifest.json'),
-    }),
+     new HardSourceWebpackPlugin(),
+    new ProgressBarPlugin()
+
   ],
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,  // 匹配node_modules目录下的文件
+          priority: -10   // 优先级配置项
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,   // 优先级配置项
+          reuseExistingChunk: true
+        }
+      }
+    }
+  
+},
   module: {
     rules: [
       {
